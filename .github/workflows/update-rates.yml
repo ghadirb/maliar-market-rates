@@ -20,7 +20,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import json, os, sys, urllib.request
+          import json, os, urllib.request
           from datetime import datetime, timezone
 
           key = os.environ.get("SERVIX_API_KEY", "").strip()
@@ -41,9 +41,22 @@ jobs:
                   raise ValueError(f"{code}: invalid value")
               return value
 
+          def fetch_first(codes):
+              last_error = None
+              for code in codes:
+                  try:
+                      return fetch(code)
+                  except Exception as exc:
+                      last_error = exc
+              print(f"optional skip {codes}: {last_error}")
+              return None
+
           output = {
               "currency": fetch("USD_RLS"),
               "gold": fetch("GOLD_18_RLS"),
+              "coinEmami": fetch_first(["SEKKEH_RLS", "SEKKEH_EMAMI_RLS", "EMAMI_RLS"]),
+              "coinHalf": fetch_first(["NIM_SEKKEH_RLS", "NIMSEKKEH_RLS"]),
+              "coinQuarter": fetch_first(["ROB_SEKKEH_RLS", "ROBSEKKEH_RLS"]),
               "updatedAt": datetime.now(timezone.utc).isoformat(),
               "source": "SERVIX",
               "status": "ok",
