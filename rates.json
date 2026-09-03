@@ -1,6 +1,7 @@
 {
-  "currency": null,
-  "gold": null,
-  "updatedAt": null,
-  "status": "not_initialized"
+  "currency": 2211683.3333333335,
+  "gold": 233891632.5,
+  "updatedAt": "2026-09-03T19:46:53.752599+00:00",
+  "source": "SERVIX",
+  "status": "ok"
 }
