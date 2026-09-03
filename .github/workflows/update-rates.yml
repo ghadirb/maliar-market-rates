@@ -1,0 +1,63 @@
+name: Update market rates
+
+on:
+  schedule:
+    - cron: "17 */2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch rates
+        env:
+          SERVIX_API_KEY: ${{ secrets.SERVIX_API_KEY }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, sys, urllib.request
+          from datetime import datetime, timezone
+
+          key = os.environ.get("SERVIX_API_KEY", "").strip()
+          if not key:
+              raise SystemExit("SERVIX_API_KEY secret is missing")
+
+          def fetch(code):
+              req = urllib.request.Request(
+                  f"https://servix.cc/api/v1/assets/{code}",
+                  headers={"X-API-Key": key, "Accept": "application/json"},
+              )
+              with urllib.request.urlopen(req, timeout=20) as response:
+                  if response.status < 200 or response.status >= 300:
+                      raise RuntimeError(f"{code}: HTTP {response.status}")
+                  data = json.load(response)
+              value = float(str(data.get("value", "")).replace(",", ""))
+              if value <= 0:
+                  raise ValueError(f"{code}: invalid value")
+              return value
+
+          output = {
+              "currency": fetch("USD_RLS"),
+              "gold": fetch("GOLD_18_RLS"),
+              "updatedAt": datetime.now(timezone.utc).isoformat(),
+              "source": "SERVIX",
+              "status": "ok",
+          }
+          with open("rates.json", "w", encoding="utf-8") as f:
+              json.dump(output, f, ensure_ascii=False, indent=2)
+              f.write("\n")
+          PY
+
+      - name: Commit updated rates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add rates.json
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: update market rates"
+          git push
