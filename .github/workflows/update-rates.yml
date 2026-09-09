@@ -57,6 +57,8 @@ jobs:
               "coinEmami": fetch_first(["SEKKEH_RLS", "SEKKEH_EMAMI_RLS", "EMAMI_RLS"]),
               "coinHalf": fetch_first(["NIM_SEKKEH_RLS", "NIMSEKKEH_RLS"]),
               "coinQuarter": fetch_first(["ROB_SEKKEH_RLS", "ROBSEKKEH_RLS"]),
+              "coinGerami": fetch_first(["SEKKEH_GERAMI_RLS", "GERAMI_RLS", "GERAMI_SEKKEH_RLS", "SEKKEH_1G_RLS", "COIN_GERAMI_RLS"]),
+              "coinBahar": fetch_first(["BAHAR_RLS", "BAHAR_AZADI_RLS", "SEKKEH_BAHAR_RLS"]),
               "updatedAt": datetime.now(timezone.utc).isoformat(),
               "source": "SERVIX",
               "status": "ok",
