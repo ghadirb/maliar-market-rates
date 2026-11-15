@@ -1,12 +1,12 @@
 {
-  "currency": 2671550.0,
-  "gold": 246281645.0,
-  "coinEmami": 2539950000.0,
-  "coinHalf": 1340600000.0,
-  "coinQuarter": 723380000.0,
-  "coinGerami": 365000000.0,
-  "coinBahar": 2456000000.0,
-  "updatedAt": "2026-11-15T09:30:10.863947+00:00",
+  "currency": 2660537.5,
+  "gold": 245316850.0,
+  "coinEmami": 2545912500.0,
+  "coinHalf": 1339150000.0,
+  "coinQuarter": 720000000.0,
+  "coinGerami": 355000000.0,
+  "coinBahar": 2448450000.0,
+  "updatedAt": "2026-11-15T17:13:37.936812+00:00",
   "source": "SERVIX",
   "status": "ok"
 }
